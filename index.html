@@ -2,47 +2,83 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Product SEO Tag Generator</title>
+  <title>SEO Tag Generator</title>
   <style>
-    body { font-family: Arial, sans-serif; margin: 2rem; }
-    input[type="text"] { width: 400px; padding: 0.5rem; }
-    button { padding: 0.5rem 1rem; }
-    #result { margin-top: 1rem; }
+    body {
+      font-family: Arial, sans-serif;
+      margin: 2rem;
+      background: #f4f4f4;
+      color: #333;
+    }
+    input[type="text"] {
+      width: 100%;
+      max-width: 500px;
+      padding: 0.75rem;
+      margin-bottom: 1rem;
+      font-size: 16px;
+    }
+    button {
+      padding: 0.75rem 1.5rem;
+      background-color: #0077cc;
+      color: white;
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+    }
+    button:hover {
+      background-color: #005fa3;
+    }
+    #result {
+      margin-top: 2rem;
+      background: white;
+      padding: 1rem;
+      border-radius: 8px;
+      max-width: 600px;
+    }
   </style>
 </head>
 <body>
   <h1>Product SEO Tag Generator</h1>
   <p>Enter the product URL:</p>
+  
   <input type="text" id="urlInput" placeholder="https://example.com/product-page">
+  <br>
   <button onclick="generateSEOTags()">Generate SEO Tags</button>
+  
   <div id="result"></div>
 
   <script>
     async function generateSEOTags() {
       const url = document.getElementById("urlInput").value.trim();
+      const resultDiv = document.getElementById("result");
+
       if (!url) {
-        alert("Please enter a URL.");
+        alert("Please enter a product URL.");
         return;
       }
-      document.getElementById("result").innerHTML = "<p>Processing...</p>";
-      
+
+      resultDiv.innerHTML = "<p>⏳ Generating tags... please wait.</p>";
+
       try {
-        const response = await fetch("https://api.yourdomain.com/generate_seo", {
+        const response = await fetch("http://146.190.115.76:1919/generate_seo", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ url: url })
+          body: JSON.stringify({ url })
         });
+
         const data = await response.json();
+
         if (data.seo_tags) {
-          document.getElementById("result").innerHTML = `<h3>SEO Tags:</h3><p>${data.seo_tags}</p>`;
+          resultDiv.innerHTML = `<h3>✅ SEO Tags:</h3><p>${data.seo_tags}</p>`;
         } else {
-          document.getElementById("result").innerHTML = `<p>${data.message}</p>`;
+          resultDiv.innerHTML = `<p>❌ ${data.message || "No tags returned."}</p>`;
         }
       } catch (error) {
-        document.getElementById("result").innerHTML = "<p>Error generating SEO tags.</p>";
         console.error(error);
+        resultDiv.innerHTML = `<p>❌ Error contacting the server.</p>`;
       }
     }
   </script>
 </body>
 </html>
+

@@ -60,7 +60,7 @@
       resultDiv.innerHTML = "<p>⏳ Generating tags... please wait.</p>";
 
       try {
-        const response = await fetch("http://146.190.115.76:1919/generate_seo", {
+        const response = await fetch("https://tags.storieswhiletravelling.com/generate_seo", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ url })
